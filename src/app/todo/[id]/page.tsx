@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { notFound } from "next/navigation"
 
 import { prisma } from "@/lib/prisma"
@@ -22,6 +23,11 @@ export default async function Todo({ params }: TodoProps) {
         <h1 className="text-2xl font-bold">Edit Todo</h1>
       </header>
       <main className="flex-1 bg-gray-50 px-4 py-6 dark:bg-gray-800">
+        <div className="container">
+          <Link href="/" className="text-black">
+            Go Back
+          </Link>
+        </div>
         <EditTodoForm id={todo.id} title={todo.title} content={todo.content} />
       </main>
     </div>

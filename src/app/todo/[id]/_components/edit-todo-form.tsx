@@ -41,9 +41,7 @@ const EditTodoForm = ({
           id="content"
           name="content"
           rows={4}
-        >
-          {content}
-        </textarea>
+        />
       </div>
       <div className="flex justify-end">
         <SaveTodo />
