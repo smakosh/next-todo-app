@@ -1,0 +1,13 @@
+{
+  "version": "5",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1700234565833,
+      "tag": "0000_greedy_captain_marvel",
+      "breakpoints": true
+    }
+  ]
+}

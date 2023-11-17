@@ -1,15 +1,17 @@
+import { todos as todoSchema } from "@/../db/schema"
 import { Input } from "@/components/ui/input"
-import type { Todo } from "@prisma/client"
+import { InferSelectModel } from "drizzle-orm"
 
 import { SaveTodo } from "@/app/_components/save-todo"
 import { updateTodo } from "@/app/actions/updateTodo"
 
-const EditTodoForm = ({
-  id,
-  title,
-  content,
-}: Pick<Todo, "id" | "title" | "content">) => {
-  const handleUpdateTodo = updateTodo.bind(null, { id })
+type EditTodoFormProps = Pick<
+  InferSelectModel<typeof todoSchema>,
+  "id" | "title" | "content"
+>
+
+const EditTodoForm = ({ id, title, content }: EditTodoFormProps) => {
+  const handleUpdateTodo = updateTodo.bind(null, { id, done: false })
   return (
     <form action={handleUpdateTodo} className="mx-auto max-w-lg">
       <div className="mb-4">

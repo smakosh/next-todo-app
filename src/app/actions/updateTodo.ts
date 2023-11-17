@@ -1,11 +1,12 @@
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
-import type { Todo } from "@prisma/client"
+import { todos as todoSchema } from "@/../db/schema"
+import { eq, InferSelectModel } from "drizzle-orm"
 
-import { prisma } from "@/lib/prisma"
+import { db } from "@/lib/db"
 
 export const updateTodo = async (
-  todoConfig: Partial<Todo>,
+  todoConfig: Pick<InferSelectModel<typeof todoSchema>, "id" | "done">,
   formData: FormData
 ) => {
   "use server"
@@ -14,24 +15,20 @@ export const updateTodo = async (
   const content = formData.get("content") as string
 
   if (title && content) {
-    await prisma.todo.update({
-      data: {
+    await db
+      .update(todoSchema)
+      .set({
         title,
         content,
-      },
-      where: {
-        id: todoConfig.id,
-      },
-    })
+      })
+      .where(eq(todoSchema.id, todoConfig.id))
   } else {
-    await prisma.todo.update({
-      data: {
+    await db
+      .update(todoSchema)
+      .set({
         done: !todoConfig.done,
-      },
-      where: {
-        id: todoConfig.id,
-      },
-    })
+      })
+      .where(eq(todoSchema.id, todoConfig.id))
   }
 
   revalidatePath("/")

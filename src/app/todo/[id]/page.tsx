@@ -1,17 +1,24 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { todos as todoSchema } from "@/../db/schema"
+import { like } from "drizzle-orm"
 
-import { prisma } from "@/lib/prisma"
+import { db } from "@/lib/db"
 import EditTodoForm from "@/app/todo/[id]/_components/edit-todo-form"
 
 type TodoProps = { params: { id: string } }
 
 export default async function Todo({ params }: TodoProps) {
-  const todo = await prisma.todo.findFirst({
-    where: {
-      id: Number(params.id),
-    },
-  })
+  if (!params.id) {
+    notFound()
+  }
+
+  const todos = await db
+    .select()
+    .from(todoSchema)
+    .where(like(todoSchema.id, params.id))
+
+  const todo = todos[0]
 
   if (!todo) {
     notFound()

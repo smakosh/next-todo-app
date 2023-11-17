@@ -1,14 +1,9 @@
-import { prisma } from "@/lib/prisma"
-
 import TodoForm from "./_components/todo-form"
 import TodoItem from "./_components/todo-item"
+import { getTodos } from "./actions/getTodos"
 
 export default async function Home() {
-  const todos = await prisma.todo.findMany({
-    orderBy: {
-      updatedAt: "desc",
-    },
-  })
+  const todos = await getTodos()
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -18,7 +13,7 @@ export default async function Home() {
       <main className="flex-1 bg-gray-50 px-4 py-6 dark:bg-gray-800">
         <div className="mx-auto max-w-lg">
           <TodoForm />
-          {todos?.length > 0 ? (
+          {todos && todos.length > 0 ? (
             <ul className="mt-4 space-y-2">
               {todos.map(({ id, title, content, done }) => (
                 <TodoItem

@@ -1,18 +1,19 @@
 import Link from "next/link"
+import { todos as todoSchema } from "@/../db/schema"
 import { Button } from "@/components/ui/button"
-import type { Todo } from "@prisma/client"
+import { InferSelectModel } from "drizzle-orm"
 
 import { cn } from "@/lib/utils"
 import { updateTodo } from "@/app/actions/updateTodo"
 
 import { deleteTodo } from "../actions/deleteTodo"
 
-const TodoItem = ({
-  id,
-  title,
-  content,
-  done,
-}: Pick<Todo, "id" | "title" | "done" | "content">) => {
+type TodoItemProps = Pick<
+  InferSelectModel<typeof todoSchema>,
+  "id" | "title" | "content" | "done"
+>
+
+const TodoItem = ({ id, title, content, done }: TodoItemProps) => {
   const updateTodoWithId = updateTodo.bind(null, { id, done })
   const deleteTodoWithId = deleteTodo.bind(null, id)
 
